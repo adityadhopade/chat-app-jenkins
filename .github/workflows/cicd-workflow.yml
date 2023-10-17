@@ -6,7 +6,24 @@ on:
 
 jobs:
   build:
-    runs-on: "ubuntu-latest"
+    runs-on: [ubuntu-latest] #github hosted runner
     steps:
       - name: Checkout scm
         uses: actions/checkout@v3
+      - name: Login to Docker 
+        run: docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} -p ${{ secrets.DOCKER_HUB_PASSWORD }}
+      - name: Build Docker Image
+        run: docker build -t adityadho/realtime-chat-app .
+      - name: Publish Image to DockerHub
+        run: docker push adityadho/realtime-chat-app:latest
+  
+  deploy:
+    needs: build #we need build job to run first then the deploy shoul;d start so we need to specify it explicityltly here
+    runs-on: [aws-ec2] #self hosted runner for aws ec2 we need to add it
+    steps:
+      - name: Pull image from the DockerGub
+        run: docker pull adityadho/realtime-chat-app:latest
+      - name: Delete any old container running
+        run: docker rm -f  realtime-chat-app-container
+      - name: Run docker container
+        run: docker run -d -p 3000:3000 --name realtime-chat-app-container  adityadho/realtime-chat-app
