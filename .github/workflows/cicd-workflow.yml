@@ -10,7 +10,7 @@ jobs:
     steps:
       - name: Checkout scm
         uses: actions/checkout@v3
-        
+
       - name: Login to Docker 
         run: docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} -p ${{ secrets.DOCKER_HUB_PASSWORD }}
 
@@ -24,6 +24,15 @@ jobs:
     needs: build #we need build job to run first then the deploy shoul;d start so we need to specify it explicityltly here
     runs-on: [aws-ec2] #self hosted runner for aws ec2 we need to add it
     steps:
+      - name: Install Docker
+        run: |
+          sudo apt update -y
+          sudo apt install apt-transport-https ca-certificates curl software-properties-common -y
+          curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -          
+          sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable" -y          
+          sudo apt update -y          
+          sudo apt install docker-ce
+        
       - name: Pull image from the DockerHub
         run: docker pull adityadho/realtime-chat-app:latest
 
