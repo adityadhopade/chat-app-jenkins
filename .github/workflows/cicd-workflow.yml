@@ -10,13 +10,16 @@ jobs:
       - name: Checkout scm
         uses: actions/checkout@v3
 
-      - name: Login to Docker 
+      - name: Login to Docker
+        id: install-docker
         run: docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} -p ${{ secrets.DOCKER_HUB_PASSWORD }}
 
       - name: Build Docker Image
+        id: build-docker
         run: docker build -t adityadho/realtime-chat-app .
         
       - name: Publish Image to DockerHub
+        id: publish-image-dockerhub
         run: docker push adityadho/realtime-chat-app:latest
   
   deploy:
@@ -24,13 +27,17 @@ jobs:
     runs-on: [aws-ec2] #self hosted runner for aws ec2 we need to add it
     steps:
       - name: Install Docker
+        id: install-docker
         run: sudo apt install docker -y
 
       - name: Pull image from the DockerHub
+        id: pull-dockerimage
         run: docker pull adityadho/realtime-chat-app:latest
 
       - name: Delete any old container running
+        id: delete-old-container
         run: docker rm -f realtime-chat-app-container
 
       - name: Run docker container
+        id: run-docker
         run: docker run -d -p 3000:3000 --name realtime-chat-app-container  adityadho/realtime-chat-app
