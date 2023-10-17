@@ -21,9 +21,9 @@ jobs:
     needs: build #we need build job to run first then the deploy shoul;d start so we need to specify it explicityltly here
     runs-on: [aws-ec2] #self hosted runner for aws ec2 we need to add it
     steps:
-      - name: Pull image from the DockerGub
+      - name: Pull image from the DockerHub
         run: docker pull adityadho/realtime-chat-app:latest
       - name: Delete any old container running
-        run: docker rm -f  realtime-chat-app-container
+        run: docker rm -f realtime-chat-app-container
       - name: Run docker container
         run: docker run -d -p 3000:3000 --name realtime-chat-app-container  adityadho/realtime-chat-app
