@@ -22,7 +22,10 @@ jobs:
   deploy:
     needs: build #we need build job to run first then the deploy shoul;d start so we need to specify it explicityltly here
     runs-on: [aws-ec2] #self hosted runner for aws ec2 we need to add it
-    steps:        
+    steps:
+      - name: Install Docker
+        run: sudo apt install docker --y 
+
       - name: Pull image from the DockerHub
         run: docker pull adityadho/realtime-chat-app:latest
 
