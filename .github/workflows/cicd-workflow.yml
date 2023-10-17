@@ -24,7 +24,7 @@ jobs:
     runs-on: [aws-ec2] #self hosted runner for aws ec2 we need to add it
     steps:
       - name: Install Docker
-        run: sudo apt install docker --y 
+        run: sudo apt install docker
 
       - name: Pull image from the DockerHub
         run: docker pull adityadho/realtime-chat-app:latest
