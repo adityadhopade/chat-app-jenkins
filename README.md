@@ -3,7 +3,6 @@
 The real-time chat app is built using socket.io and vanilla JavaScript. 
 
 🌟 Key Tools and Moments 🌟
-
 - Creating the GitHub Personal Access Token
 - Adding PAT to the Private repository
 - Implementing Terraform Scripts to Create the EC2 Jenkins Server
